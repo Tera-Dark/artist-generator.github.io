@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>画师串生成器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group span {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        input[type="range"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .slider-label {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #5c67f2;
+            color: white;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .button-container button:hover {
+            background-color: #4a54e1;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>画师串生成器</h1>
+        <div class="form-group">
+            <span>最小生成数量：</span>
+            <input id="minCountInput" type="number" placeholder="最小数量" min="1" value="1">
+        </div>
+        <div class="form-group">
+            <span>最大生成数量：</span>
+            <input id="maxCountInput" type="number" placeholder="最大数量" min="1" value="3">
+        </div>
+        <div class="form-group">
+            <span>最小权重范围（0.1-1）：</span>
+            <input id="minWeightSlider" type="range" min="0.1" max="1" step="0.1" value="0.5">
+            <div class="slider-label">当前最小权重: <span id="minWeightValue">0.5</span></div>
+        </div>
+        <div class="form-group">
+            <span>最大权重范围（1-2）：</span>
+            <input id="maxWeightSlider" type="range" min="1" max="2" step="0.1" value="1.5">
+            <div class="slider-label">当前最大权重: <span id="maxWeightValue">1.5</span></div>
+        </div>
+        <div class="button-container">
+            <button id="generateButton">生成</button>
+            <button id="copyButton">复制</button>
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const artists = [
+  "marekamico", "yuji (fantasia)", "youzha xian quanquan", "tsukii (t s u kii)", "mibai yume", "tomari (veryberryoo)", "ccroquette", "alzi_xiaomi", "so-bin", "nixeu", "huwari(dnwls3010)", "sskitaco", "akizero1510", "sowon", "kanda done", "koahri", "akipeko", "shimizuen", "jazz jack", "1ssakawaguchi", "hjl", "pomu (joynet)", "orie h", "99 yen (tsubura)", "aspara", "dolman (dm)", "tayama midori", "crisalys", "uiri-na", "mitomumitomu", "oshioshio", "toridamono", "watanabetomari", "watari(njimukiokuiro)", "shi oo", "tenteko mai51", "cuiuiiu(azenuli)", "yunoki itsugu", "cotono (nazekun)", "mamimu(ma-mi-mu.me)", "hatsushiromamimu", "uenomigi", "feerie", "nep (nep 76)", "ebihara beniko", "mimikaki_(men_bow)", "emma(kumaema)", "fuunyon", "Seri (Vyrlw)", "mike no hito", "wacca005", "tao (tao15102)", "xixeong", "rin yuu", "akiyama enma", "momomoimomoi", "sugano manami", "torotei", "llyullyuznou", "euyueuy", "komorihikki", "arthur c", "liyuliyuzhou", "LEIIUUIz", "myon (tokipi)", "mitya", "shirokujira", "tenoo12", "measho", "mute_(mute89539160)", "baffu", "hayabusa(vert320)", "bara (03 bara)", "liang xing", "heatia", "ogre_(illustogre)", "juaag acgy", "devil heavens", "Heyiapuilll", "taitai", "jeze", "mikan(manmarumikan)", "negimapurinn", "aya (lezon)", "sinmo(dolomang)", "smjim1986", "raki kr", "wonni", "aeaanooouies", "shoeguy", "whoisshe", "misekiss", "deadnooodles", "cocoballking", "indol", "al guang", "yasashii_naizou", "maria komaki", "shunsuke", "yukiko (tesseract)", "Harikamo", "danimaru", "emmikn", "na tarapisu153", "wuthering waves", "hynnOxx", "fouriasensei", "oruk", "SWKL:D", "gomzi", "Coiin", "Myabit", "memeno", "Anmi", "SayHANa", "Kieed", "zygocactus", "arutera", "miku rasha", "rcs4", "Hiten", "nimurakiseki", "urkt 10", "yusano", "zumizumi1254", "himura kiseki", "jima", "kozzz y", "96yottea", "ritaokamo", "scottiell(phantom2W)", "newest", "narue", "say hana", "mura karuki", "tokkyu", "blanci", "yotsumi shiro", "John kafka", "inugami kira", "jiuye mubiao shi mai kao hongshu", "Koh (Minagi Kou)", "wjs07", "satanmanse", "funa (sakana)", "meremero", "shizumu(shizumu)", "oanaiiaj", "airi chiffon", "kashikaze", "seisaiminty", "miwano rag", "liduke", "du(ueieie)", "mengli111", "Muririn", "ka (marukogedago)", "au (d elete)", "402 (00 xxx)", "yukoring", "suerte", "agoto", "sidu (dsd kgn)", "k_pring", "tuda6", "mokoppe", "mizumi zumi", "kinokohime", "nekometaru", "memekko", "kaneni", "hidulume", "nekometaru", "Ivaluu_ell", "wujurana", "tab head", "iwamoto_eiri", "shiokonbu", "gwan-e", "cianyo", "neco", "poonipooni", "lemon89h", "inaedakei", "kase daiki", "dduck kong", "solraka", "momisan", "myung yi", "aroa(aroamoyasi)", "champi", "sabamiso taro", "sakimori(hououbds)", "aoiogata", "hitomio", "ice_reizou", "pecopecosupipi", "yamanokami eaka", "mano aaa", "ichika(ichika87)", "23 (candy chapus)", "zerocat", "tsune (tune)", "fujiyama", "muto (nOsug4r)", "cloudyman", "mohaka (m Ohaka)", "a20 (atsumaru)", "nOnalcohol", "sengan(senngann)", "lemtun", "qtonagi", "akiaki(aki/0102)", "toma citrusta", "temtem onigiri", "netural", "7gao", "hinaki_(hinaki_0102)", "lechiennoir", "dora (garyeong)", "airfish (lefko d)", "Im7(op-center)", "rsef", "ama mitsuki", "morikura en", "cui_(jidanhaidaitang)", "ryuuforkaf", "terada tera", "uekura_eku", "riko-m", "renxzd", "himanemuitoma", "teshima nari", "kayahara", "domi ((hongsung0819))", "domil(hongsung0819V)", "bmtol", "remsrar", "aogisa", "daizu(melon-lemon)", "kadeart", "ibuki satsuki", "hyde ((tabakkol)", "dadiji", "macchal(mochanccl)", "namahamu913", "betabeet", "xiao chichi", "nocopyrightgirl", "quan (kurisu tina)", "kyouda suzuka", "hanagata", "chon_(chon33v)", "tenteko mai51", "namiki itsuki", "padoruu", "kitamurashu", "qtonagi", "huanxiang heitu", "patzzi", "waka(wk4444)", "tenebrism", "sakauchi waka", "tidsean", "saitou naoki", "umamusume style", "songjikyo", "misakikurehito", "Ipip", "hiten (hitenkei)", "hashimototakashi", "mian lang", "poprication", "sugina miki", "gemi", "xilmo", "ogipote", "kishida mel", "say hana", "HICCNU", "yukataro", "rei(sanbonzakura)", "ina(inadahime)", "meeko", "starshadowmagician", "nakamura takeshi", "menthako", "yokoyarimengo", "As109", "necro(nekurouayo)", "wada arco", "toukaairab", "amanokozue", "guweiz", "asagao minoru", "lococo:p", "morino hon", "bluethebone", "fuzichoco", "lococo:p", "sigm", "teshima_nari", "jill_07km", "dokuro_deluxe", "nanoless", "csyday", "qizhu", "wenquangua", "icecake", "usashiro_mani", "eta", "kanda_done", "bilibili_xiaolu", "sarcophage", "Jonpei", "kazutake_hazano", "yushe_quetzalli", "ueno_kishi", "camui1104", "modare", "kedamamilk"
+];
+            const generateButton = document.getElementById("generateButton");
+            const copyButton = document.getElementById("copyButton");
+            const result = document.getElementById("result");
+            const minWeightSlider = document.getElementById("minWeightSlider");
+            const maxWeightSlider = document.getElementById("maxWeightSlider");
+            const minWeightValue = document.getElementById("minWeightValue");
+            const maxWeightValue = document.getElementById("maxWeightValue");
+
+            // 更新滑块显示值
+            minWeightSlider.addEventListener("input", () => {
+                minWeightValue.textContent = parseFloat(minWeightSlider.value).toFixed(1);
+            });
+
+            maxWeightSlider.addEventListener("input", () => {
+                maxWeightValue.textContent = parseFloat(maxWeightSlider.value).toFixed(1);
+            });
+
+            // 生成内容
+            generateButton.addEventListener("click", () => {
+                const minCount = parseInt(document.getElementById("minCountInput").value, 10);
+                const maxCount = parseInt(document.getElementById("maxCountInput").value, 10);
+                const minWeight = parseFloat(minWeightSlider.value);
+                const maxWeight = parseFloat(maxWeightSlider.value);
+
+                // 校验输入值
+                if (isNaN(minCount) || isNaN(maxCount) || minCount < 1 || maxCount < 1 || minCount > maxCount) {
+                    alert("请确保生成数量输入有效！");
+                    return;
+                }
+
+                if (maxCount > artists.length) {
+                    alert("最大生成数量不能超过画师集合数量！");
+                    return;
+                }
+
+                if (minWeight >= maxWeight) {
+                    alert("最小权重范围不能大于或等于最大权重范围！");
+                    return;
+                }
+
+                const count = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+                const selectedArtists = [...artists]; // 深拷贝集合，避免修改原数组
+                const resultContent = [];
+
+                for (let i = 0; i < count; i++) {
+                    const index = Math.floor(Math.random() * selectedArtists.length);
+                    const artist = selectedArtists.splice(index, 1)[0];
+                    const weight = (Math.random() * (maxWeight - minWeight) + minWeight).toFixed(1);
+                    resultContent.push(`${artist}:${weight}`);
+                }
+
+                result.textContent = resultContent.join(", ") + ",";
+            });
+
+            // 复制结果到剪贴板
+            copyButton.addEventListener("click", () => {
+                if (result.textContent.trim() === "") {
+                    alert("没有内容可复制！");
+                    return;
+                }
+                navigator.clipboard.writeText(result.textContent)
+                    .then(() => alert("内容已复制到剪贴板！"))
+                    .catch(() => alert("复制失败，请手动复制。"));
+            });
+        });
+    </script>
+
+</body>
+
+</html>
