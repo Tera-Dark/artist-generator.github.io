@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>画师串生成器</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画师串生成器</title>
     <style>
+        /* 通用样式 */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: #eef2f3;
             color: #333;
             margin: 0;
             padding: 0;
@@ -21,57 +22,66 @@
 
         .container {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
             width: 100%;
             box-sizing: border-box;
             text-align: center;
         }
 
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #5c67f2;
+        }
+
         .form-group {
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .form-group span {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: bold;
         }
 
         input[type="number"],
         input[type="range"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             box-sizing: border-box;
         }
 
         .slider-label {
             margin-top: 10px;
             font-size: 14px;
-            color: #666;
+            color: #555;
         }
 
         .button-container {
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 15px;
             margin-top: 20px;
         }
 
         .button-container button {
-            padding: 10px;
+            padding: 12px;
             font-size: 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             background-color: #5c67f2;
             color: white;
             cursor: pointer;
             flex: 1;
+            transition: background-color 0.3s;
         }
 
         .button-container button:hover {
@@ -83,115 +93,334 @@
             font-size: 14px;
             white-space: pre-wrap;
             word-wrap: break-word;
-            border: 1px solid #ccc;
-            padding: 10px;
+            border: 1px solid #ddd;
+            padding: 15px;
             box-sizing: border-box;
             background-color: #f9f9f9;
+            border-radius: 8px;
             height: 150px;
             overflow-y: auto;
+            text-align: left;
         }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+        .artist-library {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+
+    #artistLibraryButton {
+        padding: 10px 15px;
+        background-color: #5c67f2;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #artistLibraryButton:hover {
+        background-color: #4a54e1;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        max-width: 600px;
+        width: 90%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .modal-body {
+    max-height: 300px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    }
+
+    .modal-body span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+        word-break: break-word; /* 自动换行 */
+        height: auto; /* 适应内容高度 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, background-color 0.3s;
+        cursor: pointer;
+    }
+
+    .modal-body span:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-3px); /* 悬停动画 */
+    }
+
+    .modal-footer {
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .modal-footer button {
+        padding: 12px 25px;
+        background-color: #5c67f2;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .modal-footer button:hover {
+        background-color: #4a54e1;
+    }
+
+    #searchInput {
+    width: 80%; /* 设置宽度占父容器的比例 */
+    max-width: 250px; /* 限制搜索框的最大宽度 */
+    padding: 12px 15px;
+    margin: 0 auto 10px; /* 水平居中并设置底部间距 */
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    /* 聚焦时的高亮效果 */
+    #searchInput:focus {
+        border-color: #5c67f2;
+        box-shadow: 0 2px 8px rgba(92, 103, 242, 0.3);
+    }
+
     </style>
 </head>
 
 <body>
-
     <div class="container">
         <h1>画师串生成器</h1>
+
+        <!-- 最小生成数量 -->
         <div class="form-group">
             <span>最小生成数量：</span>
             <input id="minCountInput" type="number" placeholder="最小数量" min="1" value="1">
         </div>
+
+        <!-- 最大生成数量 -->
         <div class="form-group">
             <span>最大生成数量：</span>
             <input id="maxCountInput" type="number" placeholder="最大数量" min="1" value="3">
         </div>
+
+        <!-- 最小权重范围 -->
         <div class="form-group">
             <span>最小权重范围（0.1-1）：</span>
             <input id="minWeightSlider" type="range" min="0.1" max="1" step="0.1" value="0.5">
             <div class="slider-label">当前最小权重: <span id="minWeightValue">0.5</span></div>
         </div>
+
+        <!-- 最大权重范围 -->
         <div class="form-group">
             <span>最大权重范围（1-2）：</span>
             <input id="maxWeightSlider" type="range" min="1" max="2" step="0.1" value="1.5">
             <div class="slider-label">当前最大权重: <span id="maxWeightValue">1.5</span></div>
         </div>
+
+        <!-- 按钮区 -->
         <div class="button-container">
             <button id="generateButton">生成</button>
             <button id="copyButton">复制</button>
         </div>
-        <div id="result"></div>
+
+        <!-- 结果框 -->
+        <div id="result">结果会显示在这里</div>
+
+        <footer>
+            Powered by 蘭 - 保持创意与效率并存
+        </footer>
     </div>
 
+    <div class="artist-library">
+        <button id="artistLibraryButton">画师库</button>
+    </div>
+    
+    <div id="artistLibraryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>画师库</h2>
+            </div>
+            <input type="text" id="searchInput" placeholder="搜索画师..." style="width:100%;padding:10px;margin-bottom:10px;font-size:14px;">
+            <div class="modal-body" id="artistListContainer">
+                <!-- 动态插入画师名 -->
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalButton">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+
     <script>
+        let artists = [];
+
         document.addEventListener("DOMContentLoaded", () => {
-            const artists = ["marekamico", "yuji (fantasia)", "youzha xian quanquan", "tsukii (t s u kii)", "mibai yume", "tomari (veryberryoo)", "ccroquette", "alzi_xiaomi", "so-bin", "nixeu", "huwari(dnwls3010)", "sskitaco", "akizero1510", "sowon", "kanda done", "koahri", "akipeko", "shimizuen", "jazz jack", "1ssakawaguchi", "hjl", "pomu (joynet)", "orie h", "99 yen (tsubura)", "aspara", "dolman (dm)", "tayama midori", "crisalys", "uiri-na", "mitomumitomu", "oshioshio", "toridamono", "watanabetomari", "watari(njimukiokuiro)", "shi oo", "tenteko mai51", "cuiuiiu(azenuli)", "yunoki itsugu", "cotono (nazekun)", "mamimu(ma-mi-mu.me)", "hatsushiromamimu", "uenomigi", "feerie", "nep (nep 76)", "ebihara beniko", "mimikaki_(men_bow)", "emma(kumaema)", "fuunyon", "Seri (Vyrlw)", "mike no hito", "wacca005", "tao (tao15102)", "xixeong", "rin yuu", "akiyama enma", "momomoimomoi", "sugano manami", "torotei", "llyullyuznou", "euyueuy", "komorihikki", "arthur c", "liyuliyuzhou", "LEIIUUIz", "myon (tokipi)", "mitya", "shirokujira", "tenoo12", "measho", "mute_(mute89539160)", "baffu", "hayabusa(vert320)", "bara (03 bara)", "liang xing", "heatia", "ogre_(illustogre)", "juaag acgy", "devil heavens", "Heyiapuilll", "taitai", "jeze", "mikan(manmarumikan)", "negimapurinn", "aya (lezon)", "sinmo(dolomang)", "smjim1986", "raki kr", "wonni", "aeaanooouies", "shoeguy", "whoisshe", "misekiss", "deadnooodles", "cocoballking", "indol", "al guang", "yasashii_naizou", "maria komaki", "shunsuke", "yukiko (tesseract)", "Harikamo", "danimaru", "emmikn", "na tarapisu153", "wuthering waves", "hynnOxx", "fouriasensei", "oruk", "SWKL:D", "gomzi", "Coiin", "Myabit", "memeno", "Anmi", "SayHANa", "Kieed", "zygocactus", "arutera", "miku rasha", "rcs4", "Hiten", "nimurakiseki", "urkt 10", "yusano", "zumizumi1254", "himura kiseki", "jima", "kozzz y", "96yottea", "ritaokamo", "scottiell(phantom2W)", "newest", "narue", "say hana", "mura karuki", "tokkyu", "blanci", "yotsumi shiro", "John kafka", "inugami kira", "jiuye mubiao shi mai kao hongshu", "Koh (Minagi Kou)", "wjs07", "satanmanse", "funa (sakana)", "meremero", "shizumu(shizumu)", "oanaiiaj", "airi chiffon", "kashikaze", "seisaiminty", "miwano rag", "liduke", "du(ueieie)", "mengli111", "Muririn", "ka (marukogedago)", "au (d elete)", "402 (00 xxx)", "yukoring", "suerte", "agoto", "sidu (dsd kgn)", "k_pring", "tuda6", "mokoppe", "mizumi zumi", "kinokohime", "nekometaru", "memekko", "kaneni", "hidulume", "nekometaru", "Ivaluu_ell", "wujurana", "tab head", "iwamoto_eiri", "shiokonbu", "gwan-e", "cianyo", "neco", "poonipooni", "lemon89h", "inaedakei", "kase daiki", "dduck kong", "solraka", "momisan", "myung yi", "aroa(aroamoyasi)", "champi", "sabamiso taro", "sakimori(hououbds)", "aoiogata", "hitomio", "ice_reizou", "pecopecosupipi", "yamanokami eaka", "mano aaa", "ichika(ichika87)", "23 (candy chapus)", "zerocat", "tsune (tune)", "fujiyama", "muto (nOsug4r)", "cloudyman", "mohaka (m Ohaka)", "a20 (atsumaru)", "nOnalcohol", "sengan(senngann)", "lemtun", "qtonagi", "akiaki(aki/0102)", "toma citrusta", "temtem onigiri", "netural", "7gao", "hinaki_(hinaki_0102)", "lechiennoir", "dora (garyeong)", "airfish (lefko d)", "Im7(op-center)", "rsef", "ama mitsuki", "morikura en", "cui_(jidanhaidaitang)", "ryuuforkaf", "terada tera", "uekura_eku", "riko-m", "renxzd", "himanemuitoma", "teshima nari", "kayahara", "domi ((hongsung0819))", "domil(hongsung0819V)", "bmtol", "remsrar", "aogisa", "daizu(melon-lemon)", "kadeart", "ibuki satsuki", "hyde ((tabakkol)", "dadiji", "macchal(mochanccl)", "namahamu913", "betabeet", "xiao chichi", "nocopyrightgirl", "quan (kurisu tina)", "kyouda suzuka", "hanagata", "chon_(chon33v)", "tenteko mai51", "namiki itsuki", "padoruu", "kitamurashu", "qtonagi", "huanxiang heitu", "patzzi", "waka(wk4444)", "tenebrism", "sakauchi waka", "tidsean", "saitou naoki", "umamusume style", "songjikyo", "misakikurehito", "Ipip", "hiten (hitenkei)", "hashimototakashi", "mian lang", "poprication", "sugina miki", "gemi", "xilmo", "ogipote", "kishida mel", "say hana", "HICCNU", "yukataro", "rei(sanbonzakura)", "ina(inadahime)", "meeko", "starshadowmagician", "nakamura takeshi", "menthako", "yokoyarimengo", "As109", "necro(nekurouayo)", "wada arco", "toukaairab", "amanokozue", "guweiz", "asagao minoru", "lococo:p", "morino hon", "bluethebone", "fuzichoco", "lococo:p", "sigm", "teshima_nari", "jill_07km", "dokuro_deluxe", "nanoless", "csyday", "qizhu", "wenquangua", "icecake", "usashiro_mani", "eta", "kanda_done", "bilibili_xiaolu", "sarcophage", "Jonpei", "kazutake_hazano", "yushe_quetzalli", "ueno_kishi", "camui1104", "modare", "kedamamilk"];
-            const generateButton = document.getElementById("generateButton");
-            const copyButton = document.getElementById("copyButton");
-            const result = document.getElementById("result");
-            const minWeightSlider = document.getElementById("minWeightSlider");
-            const maxWeightSlider = document.getElementById("maxWeightSlider");
-            const minWeightValue = document.getElementById("minWeightValue");
-            const maxWeightValue = document.getElementById("maxWeightValue");
+            // 初始化画师列表
+            loadArtists();
 
-            // 更新滑块显示值
-            minWeightSlider.addEventListener("input", () => {
-                minWeightValue.textContent = parseFloat(minWeightSlider.value).toFixed(1);
-            });
+            // 滑块事件绑定
+            setupSlider("minWeightSlider", "minWeightValue");
+            setupSlider("maxWeightSlider", "maxWeightValue");
 
-            maxWeightSlider.addEventListener("input", () => {
-                maxWeightValue.textContent = parseFloat(maxWeightSlider.value).toFixed(1);
-            });
-
-            // 生成内容
-            generateButton.addEventListener("click", () => {
-                const minCount = parseInt(document.getElementById("minCountInput").value, 10);
-                const maxCount = parseInt(document.getElementById("maxCountInput").value, 10);
-                const minWeight = parseFloat(minWeightSlider.value);
-                const maxWeight = parseFloat(maxWeightSlider.value);
-
-                // 校验输入值
-                if (isNaN(minCount) || isNaN(maxCount) || minCount < 1 || maxCount < 1 || minCount > maxCount) {
-                    alert("请确保生成数量输入有效！");
-                    return;
-                }
-
-                if (maxCount > artists.length) {
-                    alert("最大生成数量不能超过画师集合数量！");
-                    return;
-                }
-
-                if (minWeight >= maxWeight) {
-                    alert("最小权重范围不能大于或等于最大权重范围！");
-                    return;
-                }
-
-                const count = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
-                const selectedArtists = [...artists]; // 深拷贝集合，避免修改原数组
-                const resultContent = [];
-
-                for (let i = 0; i < count; i++) {
-                    const index = Math.floor(Math.random() * selectedArtists.length);
-                    const artist = selectedArtists.splice(index, 1)[0];
-                    const weight = (Math.random() * (maxWeight - minWeight) + minWeight).toFixed(1);
-                    resultContent.push(`(${artist}:${weight})`);
-                }
-
-                result.textContent = resultContent.join(", ") + ",";
-            });
-
-            // 复制结果到剪贴板
-            copyButton.addEventListener("click", () => {
-                if (result.textContent.trim() === "") {
-                    alert("没有内容可复制！");
-                    return;
-                }
-                navigator.clipboard.writeText(result.textContent)
-                    .then(() => alert("内容已复制到剪贴板！"))
-                    .catch(() => alert("复制失败，请手动复制。"));
-            });
+            // 按钮绑定
+            document.getElementById("generateButton").addEventListener("click", generateArtists);
+            document.getElementById("copyButton").addEventListener("click", copyToClipboard);
         });
-    </script>
 
+        // 加载画师数据
+        function loadArtists() {
+            fetch('./artists.json')
+                .then(response => {
+                    if (!response.ok) throw new Error('无法加载画师库');
+                    return response.json();
+                })
+                .then(data => {
+                    artists = data.artists;
+                })
+                .catch(error => {
+                    console.error('加载画师数据失败:', error);
+                    alert('画师库加载失败，请稍后重试。');
+                });
+        }
+
+        // 绑定滑块变化事件
+        function setupSlider(sliderId, valueId) {
+            const slider = document.getElementById(sliderId);
+            const valueDisplay = document.getElementById(valueId);
+
+            slider.addEventListener("input", () => {
+                valueDisplay.textContent = slider.value;
+            });
+        }
+
+        // 生成画师字符串
+        function generateArtists() {
+            if (artists.length === 0) {
+                alert('画师库尚未加载完成，请稍后再试。');
+                return;
+            }
+
+            const minCount = parseInt(document.getElementById("minCountInput").value) || 1;
+            const maxCount = parseInt(document.getElementById("maxCountInput").value) || 3;
+            const minWeight = parseFloat(document.getElementById("minWeightSlider").value) || 0.1;
+            const maxWeight = parseFloat(document.getElementById("maxWeightSlider").value) || 2;
+
+            const count = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+            const selectedArtists = [];
+
+            for (let i = 0; i < count; i++) {
+                const artist = artists[Math.floor(Math.random() * artists.length)];
+                const weight = (Math.random() * (maxWeight - minWeight) + minWeight).toFixed(1);
+                selectedArtists.push(`(${artist}:${weight})`);
+            }
+
+            document.getElementById("result").textContent = selectedArtists.join(', ');
+        }
+
+        // 复制结果到剪贴板
+        function copyToClipboard() {
+            const result = document.getElementById("result").textContent;
+            if (!result) {
+                alert('没有生成任何内容可供复制');
+                return;
+            }
+
+            navigator.clipboard.writeText(result)
+                .then(() => alert('结果已复制到剪贴板'))
+                .catch(err => alert('复制失败，请手动复制。'));
+        }
+
+
+        // 打开画师库按钮
+        const artistLibraryButton = document.getElementById("artistLibraryButton");
+        const artistLibraryModal = document.getElementById("artistLibraryModal");
+        const artistListContainer = document.getElementById("artistListContainer");
+        const closeModalButton = document.getElementById("closeModalButton");
+
+        artistLibraryButton.addEventListener("click", () => {
+            if (artists.length === 0) {
+                alert("画师列表尚未加载完成，请稍后再试。");
+                return;
+            }
+            showArtistLibrary();
+        });
+
+        closeModalButton.addEventListener("click", closeArtistLibrary);
+
+        // 点击窗口外关闭
+        artistLibraryModal.addEventListener("click", (event) => {
+            if (event.target === artistLibraryModal) {
+                closeArtistLibrary();
+            }
+        });
+
+        function showArtistLibrary() {
+            // 按字母排序
+            const sortedArtists = [...artists].sort((a, b) => a.localeCompare(b));
+            artistListContainer.innerHTML = sortedArtists
+                .map(artist => `<span>${artist}</span>`)
+                .join("");
+            artistLibraryModal.style.display = "block";
+
+            // 搜索框
+            const searchInput = document.getElementById("searchInput");
+            searchInput.addEventListener("input", () => {
+                const query = searchInput.value.toLowerCase();
+                const filteredArtists = sortedArtists.filter(artist => artist.toLowerCase().includes(query));
+                artistListContainer.innerHTML = filteredArtists.map(artist => `<span>${artist}</span>`).join("");
+            });
+        }
+
+        function closeArtistLibrary() {
+            artistLibraryModal.style.display = "none";
+        }
+
+    </script>
 </body>
 
 </html>
